@@ -1,0 +1,63 @@
+---
+# This will deploy naiveproxy as daemon on server
+
+- name: download and unpack navieproxy
+  unarchive:
+    src: https://github.com/klzgrad/forwardproxy/releases/download/caddy2-naive-20221007/caddy-forwardproxy-naive.tar.xz
+
+    dest: /tmp/
+    remote_src: yes
+
+- name: move caddy to /usr/bin
+  copy:
+    src: /tmp/caddy-forwardproxy-naive/caddy
+    remote_src: true
+    dest: /usr/bin/caddy
+    mode: u=rwx,g=rx,o=rx
+
+- name: init config dir
+  file:
+    path: /etc/caddy
+    owner: root
+    group: root
+    mode: '0755'
+    state: directory
+
+- name: copy the config
+  template:
+    dest: /etc/caddy/Caddyfile
+    src: Caddyfile.j2
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: add caddy group
+  group:
+    name: caddy
+    system: true
+
+- name: add caddy user
+  user:
+    name: caddy
+    group: caddy
+    home: /var/lib/caddy
+    create_home: true
+
+- name: create systemd unit file
+  template:
+    dest: /etc/systemd/system/caddy.service
+    src: caddy.service.j2
+    owner: root
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: enable caddy
+  service:
+    name: caddy
+    enabled: true
+
+- name: enable caddy
+  service:
+    state: restarted
+    name: caddy

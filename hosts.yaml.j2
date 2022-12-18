@@ -1,0 +1,16 @@
+all:
+    children:
+        blog_server:
+            hosts:
+                {{ my_server_domain }}:
+        desktop:
+            children:
+                gentoo:
+                    hosts:
+                        localhost:
+                ubuntu:
+                    host:
+                        localhost:
+                openwrt:
+                    hosts:
+                        {{ my_openwrt_hosts }}

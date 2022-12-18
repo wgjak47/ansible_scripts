@@ -1,0 +1,41 @@
+{
+  order forward_proxy before file_server
+}
+:443, {{ ansible_host }} {
+  tls me@{{ ansible_host }}
+  forward_proxy {
+    basic_auth {{ proxy_user }} {{proxy_pass}}
+    hide_ip
+    hide_via
+    probe_resistance
+  }
+  file_server {
+    root /var/www/html
+  }
+}
+
+tech.{{ ansible_host }} {
+  tls me@{{ ansible_host }}
+  forward_proxy {
+    basic_auth {{ proxy_user }} {{proxy_pass}}
+    hide_ip
+    hide_via
+    probe_resistance
+  }
+  file_server {
+    root /var/www/html/tech/public
+  }
+}
+
+games.{{ ansible_host }} {
+  tls me@games.{{ ansible_host }}
+  forward_proxy {
+    basic_auth {{ proxy_user }} {{proxy_pass}}
+    hide_ip
+    hide_via
+    probe_resistance
+  }
+  file_server {
+    root /var/www/html/games/public
+  }
+}

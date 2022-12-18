@@ -1,0 +1,16 @@
+all:
+    children:
+        blog:
+            hosts:
+                {{ my_domain }}:
+        desktops:
+            children:
+                gentoo:
+                    hosts:
+                        localhost:
+                openwrt:
+                    hosts:
+                        {{ my_opnwrt }}:
+                ubuntu:
+                    hosts:
+                        {{ my_ubuntu_laptop }}:
